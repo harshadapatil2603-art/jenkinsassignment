@@ -8,7 +8,7 @@ app.set("view engine","ejs");
 
 app.use(bodyParser.urlencoded({extended:true}));
 
-const BACKEND = process.env.BACKEND_URL || "http://backend:5000";
+const BACKEND = process.env.BACKEND_URL || "http://localhost:5000";
 
 app.get("/",(req,res)=>{
 

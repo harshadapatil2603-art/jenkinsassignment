@@ -13,7 +13,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                dir('frontend') {
+                dir('flask/frontend') {
                     sh 'npm install'
                 }
             }
@@ -21,7 +21,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                dir('frontend') {
+                dir('flask/frontend') {
                     sh '''
                     pm2 restart express-app || pm2 start npm --name express-app -- start
                     pm2 save

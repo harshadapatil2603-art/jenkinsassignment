@@ -1,0 +1,42 @@
+pipeline {
+
+    agent any
+
+    stages {
+
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/harshadapatil2603-art/jenkinsassignment.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir('frontend') {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                dir('frontend') {
+                    sh '''
+                    pm2 restart express-app || pm2 start npm --name express-app -- start
+                    pm2 save
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Frontend deployed successfully!'
+        }
+        failure {
+            echo 'Frontend deployment failed.'
+        }
+    }
+}

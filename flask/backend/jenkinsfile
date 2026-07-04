@@ -1,0 +1,48 @@
+pipeline {
+
+    agent any
+
+    stages {
+
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/harshadapatil2603-art/jenkinsassignment.git'
+            }
+        }
+
+        stage('Create Virtual Environment') {
+            steps {
+                dir('backend') {
+                    sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                dir('backend') {
+                    sh '''
+                    . venv/bin/activate
+                    pm2 restart flask-app || pm2 start "python3 app.py" --name flask-app
+                    pm2 save
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Backend deployed successfully!'
+        }
+        failure {
+            echo 'Backend deployment failed.'
+        }
+    }
+}

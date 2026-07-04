@@ -2,6 +2,13 @@ pipeline {
 
     agent any
 
+    environment {
+        MONGO_URI = credentials('mongo-uri')
+        DB_NAME = credentials('db-name')
+        COLLECTION = credentials('collection-name')
+    }
+
+
     stages {
 
         stage('Clone Repository') {
